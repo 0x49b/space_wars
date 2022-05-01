@@ -1,3 +1,5 @@
+import controlP5.*;
+
 PImage background;
 PVector backgroundPos;
 
@@ -13,13 +15,42 @@ PVector startPos, startSize;
 PVector checkpointPos, checkpointSize;
 boolean checkpointCleared = false;
 
-boolean raceStarted = false;
+boolean gameStarted = false;
+int currentScreen = 0;
 
-float raceTime = 0;
+// All Screens
+StartScreen startScreen;
+
+// Fonts
+PFont titleFont;
+
+
+// Controls
+ControlP5 cp5;
+
 
 void setup() {
   rectMode(CENTER);
   imageMode(CENTER);
+  
+  // initialize Fonts
+  titleFont = createFont("mandalore.otf", 128);
+  
+  // initialize Controls --> Change to init in class like in github repo https://github.com/sojamo/controlp5
+  cp5 = new ControlP5(this);
+  
+   cp5.addSlider("speed")
+     .setPosition(25,25)
+     .setSize(100,10)
+     .setRange(0.5,100)
+     .setValue(0.5);
+     
+      cp5.getController("speed").getValueLabel().align(ControlP5.LEFT, ControlP5.BOTTOM_OUTSIDE).setPaddingX(0);
+      cp5.getController("speed").getCaptionLabel().align(ControlP5.RIGHT, ControlP5.BOTTOM_OUTSIDE).setPaddingX(0);
+      
+  
+  // initialize all Screens needed
+  startScreen = new StartScreen();
  
   surface.setTitle("Space Wars");
   surface.setResizable(true);
@@ -32,8 +63,26 @@ void setup() {
   spaceship = new Spaceship(width/2, height/2);
   backgroundPos = new PVector(background.width/2, background.height/2);
 }
+
 void draw() {
   
+  if( currentScreen == 1 ){
+    displayGameScreen();
+  } else if(currentScreen == 2 ){
+    displayFinishScreen();
+  } else if(currentScreen == 3 ){
+    displayAboutScreen();
+  } else {
+    displayStartScreen();
+  }
+ 
+}
+
+void displayStartScreen(){
+  startScreen.draw();
+}
+
+void displayGameScreen(){
   background(0);
 
   pushMatrix();
@@ -45,14 +94,19 @@ void draw() {
   spaceship.update();
 }
 
+void displayFinishScreen(){}
+
+void displayAboutScreen(){}
+
+
 void updateStart() {
   if (isInsideRect(spaceship.pos, startPos, startSize)) {
-    if (raceStarted == false && checkpointCleared == false) {
-      raceStarted = true;
+    if (gameStarted == false && checkpointCleared == false) {
+      gameStarted = true;
       println("Race Started");
     } else if (checkpointCleared == true) {
       //If raceStarted then test if the checkpoint is clear 
-      raceStarted = false;
+      gameStarted = false;
       println("Race finished");
     }
   }
@@ -81,4 +135,11 @@ void moveBackground(PVector vel) {
   vel.x = -vel.x;
   vel.y = -vel.y;
   backgroundPos.add(vel);
+}
+
+// Control INputs must be handled here and not in the classes
+void speed(float newSpeed) {
+  try{
+    startScreen.setStarSpeed(newSpeed);
+  } catch (NullPointerException e){}
 }
