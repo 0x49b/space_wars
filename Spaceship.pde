@@ -1,3 +1,7 @@
+
+import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
+
 class Spaceship {
   
   PVector backgroundPos;
@@ -7,18 +11,23 @@ class Spaceship {
   
   PVector pos;
   float angle;
-  //float speed;
   
   float deceleration = 0.25;
   float acceleration = 0.15;
   float speed = 0.0;
   boolean move = false;
   
-  Spaceship(float x, float y, PVector bgPos) {
+  SoundFile pew;
+  
+  CopyOnWriteArrayList<Shot> shots = new CopyOnWriteArrayList();
+  
+  Spaceship(float x, float y, PVector bgPos, PApplet game) {
     spaceshipAccelerate = loadImage("spaceship.png");
     spaceshipIdle = loadImage("spaceship-idle.png");
     pos = new PVector(x, y);
     backgroundPos = bgPos;
+    
+    pew = new SoundFile(game, "pew.mp3");
   }
   
   public void setMove(boolean move){
@@ -27,6 +36,9 @@ class Spaceship {
   
   
   void show() {
+    
+    updateShots();
+    
     pushMatrix();
       translate(pos.x, pos.y);
       rotate(angle);
@@ -77,9 +89,30 @@ class Spaceship {
     backgroundPos.add(vel);
   }
   
-  void fire(){
+  void updateShots(){
+    for(Shot shot: shots){
+      if(shot.x < 0 || shot.y < 0 || shot.x > width || shot.y > height){
+        shots.remove(shot);
+      } else {
+        shot.update();
+        shot.show();
+      } 
+    }
+  }
   
+  void fire(){
     println("pew pew");
-    
+    pew.play();
+    PVector vel = PVector.sub(new PVector(mouseX, mouseY), pos);
+    Shot shot = new Shot(pos.x, pos.y, angle, vel);
+    shots.add(shot);
+  }
+  
+  void removeShot(Shot shot){
+    shots.remove(shot);
+  }
+  
+  CopyOnWriteArrayList<Shot> getShots(){
+    return shots;
   }
 }

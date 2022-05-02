@@ -1,4 +1,8 @@
+import processing.sound.*;
+
 import controlP5.*;
+
+boolean DEBUG = true;
 
 /* STEERING */
 float mapval;
@@ -11,7 +15,7 @@ PVector checkpointPos, checkpointSize;
 boolean checkpointCleared = false;
 
 boolean gameStarted = false;
-Screens currentScreen = Screens.START;
+Screens currentScreen = Screens.GAME;
 
 // All Screens
 StartScreen startScreen;
@@ -30,7 +34,7 @@ void setup() {
   size(1200, 675, P3D);
   
   // initialize Fonts
-  titleFont = createFont("mandalore.otf", 128);
+  titleFont = createFont("mandalore.otf", 200);
   
   // initialize all Screens needed
   startScreen = new StartScreen(this);
