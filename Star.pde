@@ -3,14 +3,15 @@ class Star{
   float x;
   float y;
   float z;
-  
   float speed;
+  float pz; 
   
   public Star(){
     x = random(-width/2, width/2);
     y = random(-height/2, height/2);
     z = random(width/2);
     speed = 0.5;
+    pz = z;
   }
   
   public float getZ(){
@@ -27,6 +28,7 @@ class Star{
       z = width/2;
       x = random(-width/2, width/2);
       y = random(-height/2, height/2);
+      pz = z;
     }
   }
   
@@ -39,6 +41,16 @@ class Star{
     
     float r = map(z, 0, width/2, 16, 0);
     ellipse(sx, sy, r, r);
+    
+    if(speed>40.0){
+      float px = map(x / pz, 0, 1, 0, width/2);
+      float py = map(y / pz, 0, 1, 0, height/2);
+      pz = z;
+  
+      stroke(255);
+      line(px, py, sx, sy);
+    }
+    
   }
 
 }
