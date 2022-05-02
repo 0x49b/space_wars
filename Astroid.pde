@@ -1,9 +1,9 @@
 class Asteroid{
-
-
-  float x;
-  float y;
-  float r;
+  
+  float x = 0;
+  float y = 0;
+  float v = 0;
+  float r = 0;
   
   PVector pos;
   
@@ -18,7 +18,16 @@ class Asteroid{
     pos = new PVector(x, y);
   }
   
-  public void update(){
+  public Asteroid(float ix, float iy, float ir, float iv){
+    x = ix;
+    y = iy;
+    r = ir;
+    v = iv;
+  }
+  
+  public void update(){ 
+    x += v;
+    y += v;
   }
   
   public void show(){

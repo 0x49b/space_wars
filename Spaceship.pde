@@ -1,118 +1,156 @@
-
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-class Spaceship {
+class Spaceship{
   
-  PVector backgroundPos;
-  
-  PImage spaceshipAccelerate;
-  PImage spaceshipIdle;
-  
-  PVector pos;
-  float angle;
-  
-  float deceleration = 0.25;
-  float acceleration = 0.15;
-  float speed = 0.0;
-  boolean move = false;
-  
+  //Sounds
   SoundFile pew;
   
-  CopyOnWriteArrayList<Shot> shots = new CopyOnWriteArrayList();
+  // SpaceShip Image
+  PImage spaceship;
+  PImage spaceshipIdle;
+  int size = 64;
   
-  Spaceship(float x, float y, PVector bgPos, PApplet game) {
-    spaceshipAccelerate = loadImage("spaceship.png");
+  // SpaceShip pos and movement
+  //PVector pos;
+  
+  float shipX = width/2;
+  float shipY = height/2;
+  float shipDir = 0;
+  float shipXSpeed = 0;
+  float shipYSpeed = 0;
+  float shipSpeed = 0.1;
+  float shipDrag = 0.05;
+  
+  boolean right = false;
+  boolean left = false;
+  boolean booster = false;
+     //<>//
+  // Bullets
+  CopyOnWriteArrayList<Bullet> bullets = new CopyOnWriteArrayList();
+   
+  public Spaceship(PApplet game){
+    spaceship = loadImage("spaceship.png");
     spaceshipIdle = loadImage("spaceship-idle.png");
-    pos = new PVector(x, y);
-    backgroundPos = bgPos;
-    
     pew = new SoundFile(game, "pew.mp3");
   }
   
-  public void setMove(boolean move){
-    this.move = move;
+  public String toString(){
+    return "Spaceship left " + left +" right " + right + " booster " + booster; 
   }
   
   
-  void show() {
-    
-    updateShots();
-    
-    pushMatrix();
-      translate(pos.x, pos.y);
-      rotate(angle);
-      if(move){
-        image(spaceshipAccelerate, 0, 0);
-      }else{
-        image(spaceshipIdle, 0, 0);
-      }
-    popMatrix();
-    
-  }
-  void update() {
-    updateAngle();
-    updateMovementSecondExample();
+  public void update(){
+    updateShip();
+    updateBullets();
   }
   
-  void updateAngle() {
-    PVector vel = PVector.sub(new PVector(mouseX, mouseY), pos);
-    angle = atan2(vel.y, vel.x);
-  }
+  public void updateBullets(){
   
- 
-  void updateMovementSecondExample() {
-    
-    if (move){
-      speed += acceleration;
-      if(speed > 20){
-        speed = 20;
-      }
-    } else {
-      speed -= deceleration;
-      if(speed < 0){
-        speed = 0;
-      }
-    }
-    
-      PVector vel = PVector.sub(new PVector(mouseX, mouseY), pos);
-      if (vel.mag() < speed) return;
-      vel.normalize();
-      vel.mult(speed);
-      moveBackground(vel);
- 
-  }
-  
-  void moveBackground(PVector vel) {
-    vel.x = -vel.x;
-    vel.y = -vel.y;
-    backgroundPos.add(vel);
-  }
-  
-  void updateShots(){
-    for(Shot shot: shots){
-      if(shot.x < 0 || shot.y < 0 || shot.x > width || shot.y > height){
-        shots.remove(shot);
+    for(Bullet bullet : bullets){
+      if(bullet.x < 0 || bullet.y < 0 || bullet.x > width || bullet.y > height){
+        bullets.remove(bullet);
       } else {
-        shot.update();
-        shot.show();
+        bullet.update();
+        bullet.show();
       } 
     }
+  
   }
   
-  void fire(){
-    println("pew pew");
-    pew.play();
-    PVector vel = PVector.sub(new PVector(mouseX, mouseY), pos);
-    Shot shot = new Shot(pos.x, pos.y, angle, vel);
-    shots.add(shot);
+  public void updateShip(){
+        
+    if (booster) {
+      shipXSpeed += shipSpeed * sin(radians(shipDir));
+      shipYSpeed += -shipSpeed * cos(radians(shipDir));
+    } else {
+      if (shipXSpeed > shipDrag) {
+        shipXSpeed -= shipDrag;
+      } else if (shipXSpeed < -shipDrag) {
+        shipXSpeed += shipDrag;
+      }
+      
+      if (shipYSpeed > shipDrag) {
+        shipYSpeed -= shipDrag;
+      } else if (shipYSpeed < -shipDrag) {
+        shipYSpeed += shipDrag;
+      }
+      
+    }
+    
+    if (left) {
+      if( shipDir < 0 ){
+        shipDir = shipDir + 360;
+      } else {
+        shipDir -= 5;
+      }
+    }
+    
+    if (right) {
+      if(shipDir > 360){
+        shipDir = shipDir-360;
+      }else{
+        shipDir += 5;
+      }
+    }
+        
+    shipX += shipXSpeed;
+    shipY += shipYSpeed;
+    
+    if (shipX < 0) {
+      shipX = width;
+    }
+    if (shipX > width) {
+      shipX = 0;
+    }
+    if (shipY < 0) {
+      shipY = height;
+    }
+    if (shipY > height) {
+      shipY = 0;
+    }
+        
   }
   
-  void removeShot(Shot shot){
-    shots.remove(shot);
+    
+  public void show(){
+    pushMatrix();
+      translate(shipX, shipY); 
+      rotate(radians(shipDir));
+     
+      if(booster){
+        image(spaceship, -size/2, -size/2, size, size);
+      } else {
+        image(spaceshipIdle, -size/2, -size/2, size, size);
+      }
+    popMatrix();
+  } 
+
+  
+  
+  //Steering & Firing
+  public void toggleLeft(boolean toggleLeft){
+    left = toggleLeft;
   }
   
-  CopyOnWriteArrayList<Shot> getShots(){
-    return shots;
+  public void toggleRight(boolean toggleRight){
+    right = toggleRight;
   }
+  
+  public void toggleBooster(boolean toggleBooster){
+    booster = toggleBooster;
+  }
+  
+  public void shoot(){
+    pew.play();  
+    Bullet bullet = new Bullet(shipX, shipY, radians(shipDir - 90));
+    bullets.add(bullet);
+  }
+  
+ CopyOnWriteArrayList<Bullet> getShots(){
+    return bullets;
+  }
+  
+  
+  
 }

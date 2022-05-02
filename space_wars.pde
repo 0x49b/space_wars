@@ -15,7 +15,7 @@ PVector checkpointPos, checkpointSize;
 boolean checkpointCleared = false;
 
 boolean gameStarted = false;
-Screens currentScreen = Screens.GAME;
+Screens currentScreen = Screens.START;
 
 // All Screens
 StartScreen startScreen;
@@ -25,10 +25,7 @@ AboutScreen aboutScreen;
 // Fonts
 PFont titleFont;
 
-void setup() {
-  rectMode(CENTER);
-  imageMode(CENTER);
-  
+void setup() {  
   surface.setTitle("Space Wars");
   //surface.setResizable(true);
   size(1200, 675, P3D);
@@ -71,31 +68,45 @@ void displayAboutScreen(){
   aboutScreen.draw();
 }
 
-boolean isInsideRect(PVector p, PVector rp, PVector rs) {
-  if (p.x > rp.x - rs.x/2 && p.x < rp.x + rs.x/2 && 
-    p.y > rp.y - rs.y/2 && p.y < rp.y + rs.y/2) {
-    return true;
-  }
-  return false;
-}
-
-void keyPressed() {
-  if (key == 'w' || key == 'W') {
-    gameScreen.updateSpaceShip(true);
-  }
-}
-void keyReleased() {
-  if (key == 'w' || key == 'W') {
-    gameScreen.updateSpaceShip(false);
-  }
+void keyPressed(){  
+  switch(keyCode){
+    case 65:
+    case 37: 
+      gameScreen.spaceship.toggleLeft(true);
+      break;
+    case 68:
+    case 39:
+      gameScreen.spaceship.toggleRight(true);
+      break;
+    case 87:
+    case 38:
+      gameScreen.spaceship.toggleBooster(true);
+      break;
+   }
 }
 
 void mousePressed(){
-  if(currentScreen == Screens.GAME){
-    gameScreen.fireSpaceShip();
+  if (mousePressed && (mouseButton == LEFT) && currentScreen == Screens.GAME) {
+    gameScreen.spaceship.shoot(); 
   }
 }
 
+void keyReleased(){
+  switch(keyCode){
+    case 65:
+    case 37: 
+      gameScreen.spaceship.toggleLeft(false);
+      break;
+    case 68:
+    case 39:
+      gameScreen.spaceship.toggleRight(false);
+      break;
+    case 87:
+    case 38:
+      gameScreen.spaceship.toggleBooster(false);
+      break;
+  }
+}
 
 // Control Inputs must be handled here and not in the classes
 void speed(float newSpeed) {
@@ -114,8 +125,7 @@ void startGame(){
 // Go Back to Menu
 void menu(){
   gameScreen.hideControls();
-  gameScreen.setGameRunning(false);
-  
+   
   aboutScreen.hideControls();
   currentScreen = Screens.START;
 }
