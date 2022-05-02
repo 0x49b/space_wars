@@ -1,7 +1,7 @@
 class StartScreen implements Screen{
   
   ControlP5 cp5;
-  ControlFont cf2 = new ControlFont(createFont("Times",18));
+  ControlFont cf2 = new ControlFont(createFont("opensans.ttf",18));
   Star[] stars = new Star[1000];
 
   public StartScreen(PApplet cp5Applet){

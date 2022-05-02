@@ -53,6 +53,7 @@ void draw() {
 }
 
 void displayStartScreen(){
+  aboutScreen.hideControls();
   startScreen.draw();
 }
 
@@ -92,14 +93,12 @@ void mousePressed(){
 }
 
 
-
-// Control INputs must be handled here and not in the classes
+// Control Inputs must be handled here and not in the classes
 void speed(float newSpeed) {
   try{
     startScreen.setStarSpeed(newSpeed);
   } catch (NullPointerException e){}
 }
-
 
 // ControlP5 Functions
 // Start the game
@@ -119,5 +118,6 @@ void menu(){
 
 void about(){
   startScreen.hideControls();
+  aboutScreen.reset();
   currentScreen = Screens.ABOUT;
 }
