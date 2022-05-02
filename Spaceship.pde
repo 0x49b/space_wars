@@ -3,8 +3,9 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 class Spaceship{
   
-  //Sounds
+  //Sounds & Fonts
   SoundFile pew;
+  PFont shipNameFont;
   
   // SpaceShip Image
   PImage spaceship;
@@ -33,6 +34,7 @@ class Spaceship{
     spaceship = loadImage("spaceship.png");
     spaceshipIdle = loadImage("spaceship-idle.png");
     pew = new SoundFile(game, "pew.mp3");
+    shipNameFont = createFont("opensans.ttf", 12);
   }
   
   public String toString(){
@@ -116,8 +118,13 @@ class Spaceship{
   public void show(){
     pushMatrix();
       translate(shipX, shipY); 
+      
       rotate(radians(shipDir));
-     
+      textFont(shipNameFont);
+      textAlign(CENTER);
+      text(playerName, 0, size/2 );
+      
+      // tint(255,230,70); // for enemies
       if(booster){
         image(spaceship, -size/2, -size/2, size, size);
       } else {
@@ -151,6 +158,21 @@ class Spaceship{
     return bullets;
   }
   
+  public void reset(){
+   shipX = width/2;
+   shipY = height/2;
+   shipDir = 0;
+   shipXSpeed = 0;
+   shipYSpeed = 0;
+   shipSpeed = 0.1;
+   shipDrag = 0.05;
   
+   right = false;
+   left = false;
+   booster = false;
+    
+    // Bullets
+    bullets.clear();
+  }
   
 }

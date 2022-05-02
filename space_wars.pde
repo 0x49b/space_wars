@@ -25,6 +25,11 @@ AboutScreen aboutScreen;
 // Fonts
 PFont titleFont;
 
+ControlP5 cp5;
+
+String textValue ="";
+String playerName;
+
 void setup() {  
   surface.setTitle("Space Wars");
   //surface.setResizable(true);
@@ -32,6 +37,8 @@ void setup() {
   
   // initialize Fonts
   titleFont = createFont("mandalore.otf", 200);
+  
+  cp5 = new ControlP5(this);
   
   // initialize all Screens needed
   startScreen = new StartScreen(this);
@@ -68,21 +75,24 @@ void displayAboutScreen(){
   aboutScreen.draw();
 }
 
-void keyPressed(){  
-  switch(keyCode){
-    case 65:
-    case 37: 
-      gameScreen.spaceship.toggleLeft(true);
-      break;
-    case 68:
-    case 39:
-      gameScreen.spaceship.toggleRight(true);
-      break;
-    case 87:
-    case 38:
-      gameScreen.spaceship.toggleBooster(true);
-      break;
-   }
+void keyPressed(){
+  
+  if(currentScreen == Screens.GAME){
+    switch(keyCode){
+      case 65:
+      case 37: 
+        gameScreen.spaceship.toggleLeft(true);
+        break;
+      case 68:
+      case 39:
+        gameScreen.spaceship.toggleRight(true);
+        break;
+      case 87:
+      case 38:
+        gameScreen.spaceship.toggleBooster(true);
+        break;
+     }
+  }
 }
 
 void mousePressed(){
@@ -92,19 +102,22 @@ void mousePressed(){
 }
 
 void keyReleased(){
-  switch(keyCode){
-    case 65:
-    case 37: 
-      gameScreen.spaceship.toggleLeft(false);
-      break;
-    case 68:
-    case 39:
-      gameScreen.spaceship.toggleRight(false);
-      break;
-    case 87:
-    case 38:
-      gameScreen.spaceship.toggleBooster(false);
-      break;
+  
+  if(currentScreen == Screens.GAME){
+    switch(keyCode){
+      case 65:
+      case 37: 
+        gameScreen.spaceship.toggleLeft(false);
+        break;
+      case 68:
+      case 39:
+        gameScreen.spaceship.toggleRight(false);
+        break;
+      case 87:
+      case 38:
+        gameScreen.spaceship.toggleBooster(false);
+        break;
+    }
   }
 }
 
@@ -116,15 +129,23 @@ void speed(float newSpeed) {
 }
 
 // ControlP5 Functions
+
 // Start the game
 void startGame(){
   startScreen.hideControls();
+  playerName = startScreen.cp5.get(Textfield.class, "textValue").getText();
+  if(playerName.length() < 3 || playerName.length() > 8){
+     startScreen.showPlayerNameError();
+     return;
+  }
+  startScreen.hidePlayerNameError();
   currentScreen = Screens.GAME;
 }
 
 // Go Back to Menu
 void menu(){
   gameScreen.hideControls();
+  gameScreen.reset();
    
   aboutScreen.hideControls();
   currentScreen = Screens.START;

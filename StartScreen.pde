@@ -1,8 +1,13 @@
 class StartScreen implements Screen{
   
   ControlP5 cp5;
+  
+  PFont cf1 = createFont("opensans.ttf",14);
   ControlFont cf2 = new ControlFont(createFont("opensans.ttf",18));
+  
   Star[] stars = new Star[1000];
+  
+  boolean playerNameError = false;
 
   public StartScreen(PApplet cp5Applet){
     cp5 = new ControlP5(cp5Applet);
@@ -18,16 +23,33 @@ class StartScreen implements Screen{
      cp5.addButton("startGame")
      .setSize(150, 50)
      .setFont(cf2)
-     .setPosition(width/2-75,height/4 + 120);
+     .setPosition(width/2-75,height/4 + 220);
      
      cp5.addButton("about")
      .setPosition(width-100,25);
+          
+     cp5.addTextfield("textValue")
+     .setPosition(width/2-100,height/4 + 120)
+     .setSize(200,40)
+     .setFont(cf2)
+     .setFocus(true)
+     .setAutoClear(false);
+     
+     cp5.getController("textValue").setCaptionLabel("Playername");
      
      cp5.hide();
    
     for( int i = 0; i < stars.length; i++ ){
       stars[i] = new Star();
     }
+  }
+  
+  public void showPlayerNameError(){
+    playerNameError = true;
+  }
+  
+  public void hidePlayerNameError(){
+    playerNameError = false;
   }
   
   public void showControls(){
@@ -59,6 +81,16 @@ class StartScreen implements Screen{
     textAlign(CENTER, CENTER);
     textFont(titleFont);
     text("SpaceWars", width/2, height/4); 
+    
+    if(playerNameError){
+      pushMatrix();
+        fill(250, 0, 160);
+        textFont(cf1);
+        textAlign(CENTER);
+        text("Spielername muss zwischen 3 und 8 Zeichen lang sein.", width/2,height/4 + 300 );
+      popMatrix();
+    }
+    
   }
   
   
@@ -67,5 +99,5 @@ class StartScreen implements Screen{
       stars[i].setSpeed(newSpeed);
     }
   }
-
+ 
 }

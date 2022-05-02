@@ -23,6 +23,11 @@ class GameScreen implements Screen{
     spaceship.shoot();
   }
   
+  
+  public void reset(){
+    spaceship.reset();
+  }
+  
   public void hideControls(){
     cp5.hide();
   }
