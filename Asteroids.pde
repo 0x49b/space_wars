@@ -9,7 +9,10 @@ class Asteroids{
   
   public void update(){
     
-    spawnAsteroid();
+    if(frameCount % 9 == 0 && asteroids.size() < 50){
+      spawnAsteroid();
+    }
+    
     
     for( Asteroid a : asteroids ){
       println(a.x +" "+ a.y);
@@ -20,9 +23,11 @@ class Asteroids{
   
   private void spawnAsteroid(){
     
-    float radius = random(30, 100);
+    float radius = random(20, 50);
     float x;
     float y;
+    
+    float speedModifier = random(2, 3);
     
     float rand = random(0,2);
     
@@ -38,21 +43,22 @@ class Asteroids{
     } else if( rand>1.0 && rand <1.5 ){
     
       x = width;
-      y = 0 - radius;
+      y = random(0, height);
       
-      
+      speedModifier = -speedModifier;
+
     } else {
     
-      
-      
+      x = random(0, width);
+      y = height;
+       speedModifier = -speedModifier;
+
     }
     
     float angle = atan2(x, y);
     
     PVector velocity = new PVector( cos(angle), sin(angle) );
-    
-    float speedModifier = random(2, 3); 
-    
+
     asteroids.add( new Asteroid(x, y, radius, velocity, speedModifier));
     
   
