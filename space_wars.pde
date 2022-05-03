@@ -29,6 +29,7 @@ ControlP5 cp5;
 
 String textValue ="";
 String playerName;
+boolean sound = true;
 
 void setup() {  
   surface.setTitle("Space Wars");
@@ -141,6 +142,11 @@ void startGame(){
   startScreen.hidePlayerNameError();
   currentScreen = Screens.GAME;
 }
+
+void sound(boolean theFlag) {
+  sound = !theFlag;
+}
+
 
 // Go Back to Menu
 void menu(){

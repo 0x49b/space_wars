@@ -8,7 +8,7 @@ class StartScreen implements Screen{
   Star[] stars = new Star[1000];
   
   boolean playerNameError = false;
-
+ 
   public StartScreen(PApplet cp5Applet){
     cp5 = new ControlP5(cp5Applet);
     cp5.addSlider("speed")
@@ -16,9 +16,15 @@ class StartScreen implements Screen{
      .setSize(100,10)
      .setRange(0.5,100)
      .setValue(0.5);
-     
       cp5.getController("speed").getValueLabel().align(ControlP5.LEFT, ControlP5.BOTTOM_OUTSIDE).setPaddingX(0);
       cp5.getController("speed").getCaptionLabel().align(ControlP5.RIGHT, ControlP5.BOTTOM_OUTSIDE).setPaddingX(0);
+      
+     cp5.addToggle("sound")
+     .setPosition(150,25)
+     .setSize(50,10)
+     .setValue(!sound)
+     .setMode(ControlP5.SWITCH);
+     cp5.getController("sound").setCaptionLabel("Effects");
       
      cp5.addButton("startGame")
      .setSize(150, 50)
@@ -36,7 +42,7 @@ class StartScreen implements Screen{
      .setAutoClear(false);
      
      cp5.getController("textValue").setCaptionLabel("Playername");
-     
+          
      cp5.hide();
    
     for( int i = 0; i < stars.length; i++ ){
