@@ -2,6 +2,7 @@ class GameScreen implements Screen{
   ControlP5 cp5;
   Spaceship spaceship;
   GSBackground gsBackground;
+  Asteroids asteroids;
    
   public GameScreen(PApplet cp5Applet){
     cp5 = new ControlP5(cp5Applet);
@@ -9,6 +10,7 @@ class GameScreen implements Screen{
     cp5.hide();
     gsBackground = new GSBackground();
     spaceship = new Spaceship(cp5Applet);
+    asteroids = new Asteroids();
   }
  
   public void draw(){
@@ -17,6 +19,7 @@ class GameScreen implements Screen{
     gsBackground.draw();
     spaceship.show();
     spaceship.update();
+    asteroids.update();
   }
   
   public void fireSpaceShip(){

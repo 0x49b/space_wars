@@ -150,14 +150,11 @@ class Spaceship{
   
   public void shoot(){
     // Set the sounds on or off based on toggle from StartScreen
-    println("SOUND IS " + sound);
-    if(sound){
-      pew.amp(1.0);
-    } else {
-      pew.amp(0.0);
-    }
     
-    pew.play();  
+    if(sound){
+      pew.play();
+    } 
+     
     Bullet bullet = new Bullet(shipX, shipY, radians(shipDir - 90));
     bullets.add(bullet);
   }
