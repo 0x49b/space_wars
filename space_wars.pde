@@ -1,5 +1,4 @@
 import processing.sound.*;
-
 import controlP5.*;
 
 boolean DEBUG = true;
@@ -21,6 +20,7 @@ Screens currentScreen = Screens.START;
 StartScreen startScreen;
 GameScreen gameScreen;
 AboutScreen aboutScreen;
+MultiplayerScreen multiplayerScreen;
 
 // Fonts
 PFont titleFont;
@@ -45,17 +45,20 @@ void setup() {
   startScreen = new StartScreen(this);
   gameScreen = new GameScreen(this);
   aboutScreen = new AboutScreen(this);
+  multiplayerScreen = new MultiplayerScreen(this);
 }
 
 void draw() {
-  
+    
   if( currentScreen == Screens.GAME ){
     displayGameScreen();
   } else if(currentScreen == Screens.FINISHED ){
     displayFinishScreen();
   } else if(currentScreen == Screens.ABOUT ){
     displayAboutScreen();
-  } else {
+  } else if(currentScreen == Screens.MULTIPLAYER ){
+    displayMultiplayerScreen();
+  }else {
     displayStartScreen();
   }
  
@@ -74,6 +77,10 @@ void displayFinishScreen(){}
 
 void displayAboutScreen(){
   aboutScreen.draw();
+}
+
+void displayMultiplayerScreen(){
+  multiplayerScreen.draw();
 }
 
 void keyPressed(){
@@ -143,6 +150,19 @@ void startGame(){
   currentScreen = Screens.GAME;
 }
 
+
+void multiplayer(){
+  startScreen.hideControls();
+  playerName = startScreen.cp5.get(Textfield.class, "textValue").getText();
+  if(playerName.length() < 3 || playerName.length() > 8){
+     startScreen.showPlayerNameError();
+     return;
+  }
+  startScreen.hidePlayerNameError();
+  multiplayerScreen.connectClient();
+  currentScreen = Screens.MULTIPLAYER;
+}
+
 void sound(boolean theFlag) {
   sound = !theFlag;
 }
@@ -152,8 +172,12 @@ void sound(boolean theFlag) {
 void menu(){
   gameScreen.hideControls();
   gameScreen.reset();
-   
   aboutScreen.hideControls();
+  try{
+    multiplayerScreen.hideControls();
+    multiplayerScreen.disconnectClient();
+  } catch (Exception e){}
+
   currentScreen = Screens.START;
 }
 
@@ -161,4 +185,18 @@ void about(){
   startScreen.hideControls();
   aboutScreen.reset();
   currentScreen = Screens.ABOUT;
+}
+
+
+// MQTT Callbacks
+void clientConnected() {
+  println("client connected");
+}
+
+void connectionLost() {
+  println("connection lost");
+}
+
+void messageReceived(String topic, byte[] payload) {
+  println("new message: " + topic + " - " + new String(payload));
 }

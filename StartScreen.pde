@@ -31,6 +31,12 @@ class StartScreen implements Screen{
      .setFont(cf2)
      .setPosition(width/2-75,height/4 + 220);
      
+     cp5.addButton("multiplayer")
+     .setSize(150, 50)
+     .setFont(cf2)
+     .setPosition(width/2-75,height/4 + 290);
+     
+     
      cp5.addButton("about")
      .setPosition(width-100,25);
           
@@ -93,7 +99,7 @@ class StartScreen implements Screen{
         fill(250, 0, 160);
         textFont(cf1);
         textAlign(CENTER);
-        text("Spielername muss zwischen 3 und 8 Zeichen lang sein.", width/2,height/4 + 300 );
+        text("Spielername muss zwischen 3 und 8 Zeichen lang sein.", width/2,height/4 + 360 );
       popMatrix();
     }
     

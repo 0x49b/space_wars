@@ -9,53 +9,65 @@ class Asteroids{
   
   public void update(){
     
-    if(frameCount % 9 == 0 && asteroids.size() < 50){
+    if(DEBUG){
+      text("Asteroids: " + asteroids.size(), 250, 25);
+    }
+    
+    if(frameCount % 25 == 0 && asteroids.size() < 50){
       spawnAsteroid();
     }
     
     
     for( Asteroid a : asteroids ){
-      println(a.x +" "+ a.y);
+  
+      println(a.x +" "+ a.y + " " + a.angle);
       a.update();
+      
+      if( a.x < 0 - (2*a.r) || a.x > width + (2*a.r) || a.y < 0 - (2*a.r) || a.y > height + (2*a.r)){
+        asteroids.remove(a);
+      }
+      
       a.show();
-    }
+    
+  }
+    
   }
   
   private void spawnAsteroid(){
     
     float radius = random(20, 50);
-    float x;
-    float y;
+    float x = 0;
+    float y = 0;
     
     float speedModifier = random(2, 3);
     
     float rand = random(0,2);
     
-    if(rand < 0.5){
+    
+    if(rand <= 0.5){ //left Border spawnpoint
+    
       x = 0 - radius;
       y = random(0, height);
-      
-    } else if (rand>0.5 && rand <1.0) {
-      
+    
+    } else if(rand > 0.5 && rand <= 1.0){ //top Border spawnpoint
+    
+      x = width + radius;
+      y = random(0, height);
+    
+    } else if(rand > 1.0 && rand <= 1.5){ //right Border spawnpoint
+    
       x = random(0, width);
       y = 0 - radius;
-      
-    } else if( rand>1.0 && rand <1.5 ){
     
-      x = width;
-      y = random(0, height);
-      
-      speedModifier = -speedModifier;
-
-    } else {
+    } else if(rand > 1.5 && rand <= 2.0){ //bottom Border spawnpoint
     
       x = random(0, width);
-      y = height;
-       speedModifier = -speedModifier;
-
+      y = height + radius;
+    
     }
     
-    float angle = atan2(x, y);
+     
+    float angle = atan2(x, y) + random(0, 15);
     
     PVector velocity = new PVector( cos(angle), sin(angle) );
 

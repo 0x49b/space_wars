@@ -2,5 +2,6 @@ enum Screens{
   START,
   GAME,
   FINISHED,
-  ABOUT
+  ABOUT,
+  MULTIPLAYER
 }

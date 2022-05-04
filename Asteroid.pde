@@ -12,6 +12,8 @@ class Asteroid{
   int minR = 20;
   int decay = 5;
   
+  float angle = 0;
+  
   
   public Asteroid(float ix, float iy, float ir, PVector iVelocity, float iSpeedModifier){
     x = ix;
@@ -19,11 +21,12 @@ class Asteroid{
     r = ir;
     velocity = iVelocity;
     speedModifier = iSpeedModifier;
+    angle = atan2(velocity.x, velocity.y);
   }
   
   public void update(){ 
-    x += velocity.x * speedModifier;
-    y += velocity.y * speedModifier;
+    x += velocity.x * speedModifier + angle;
+    y += velocity.y * speedModifier + angle;
   }
   
   public void show(){
