@@ -9,4 +9,4 @@ Während der Schlacht um MSP ist es den Studenten gelungen, einen Push auf den M
 Verfolgt vom bösen BufferOverflow und seinen NullpointerException jagen die Studenten mit einer Flotte Debugger den Semesterende entgegen um für den nächsten Kampf bereit zu sein....
 
 ws2C, FS22
-Luca Dietiker, Jessica Christ, Florian Thiévent
+Jessica Christ, Luca Dietiker, Florian Thiévent
