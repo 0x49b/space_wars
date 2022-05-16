@@ -43,7 +43,7 @@ class Spaceship{
   
   
   public void update(){
-    updateShip();
+    updateShip(); 
     updateBullets();
   }
   
@@ -116,6 +116,16 @@ class Spaceship{
   
     
   public void show(){
+    
+    // Show Hitbox if Debug is enabled
+    if(DEBUG){
+      stroke(0,255,0);
+      noFill();
+      rectMode(CENTER);
+      circle(shipX, shipY, size/2+10);
+    }
+        
+      
     pushMatrix();
       translate(shipX, shipY); 
       
@@ -123,7 +133,7 @@ class Spaceship{
       textFont(shipNameFont);
       textAlign(CENTER);
       text(playerName, 0, size/2 );
-      
+
       // tint(255,230,70); // for enemies
       if(booster){
         image(spaceship, -size/2, -size/2, size, size);

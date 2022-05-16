@@ -10,17 +10,21 @@ class Asteroids{
   public void update(){
     
     if(DEBUG){
-      text("Asteroids: " + asteroids.size(), 250, 25);
+      pushMatrix();
+        fill(255);
+        textAlign(LEFT);
+        text("Asteroids: " + asteroids.size()+ " frameRate: " +  round(frameRate) + "FPS", 25, height - 25 );
+      popMatrix();
     }
     
-    if(frameCount % 25 == 0 && asteroids.size() < 50){
+    if(frameCount % 10 == 0 && asteroids.size() < 50){
       spawnAsteroid();
     }
     
     
     for( Asteroid a : asteroids ){
   
-      println(a.x +" "+ a.y + " " + a.angle);
+      //println(a.x +" "+ a.y + " " + a.angle);
       a.update();
       
       if( a.x < 0 - (2*a.r) || a.x > width + (2*a.r) || a.y < 0 - (2*a.r) || a.y > height + (2*a.r)){

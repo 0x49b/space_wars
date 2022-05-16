@@ -25,8 +25,6 @@ class AboutScreen implements Screen{
 
   public AboutScreen(PApplet cp5Applet){
     cp5 = new ControlP5(cp5Applet);
-    cp5.addButton("menu")
-     .setPosition(25,25);
      
     hideControls();
     

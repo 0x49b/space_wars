@@ -30,7 +30,15 @@ class Asteroid{
   }
   
   public void show(){
-    noStroke();
+   
+    if(DEBUG){
+      stroke(0,255,0);
+    }else {
+      noStroke();
+    }
+    
+   
+    
     fill(255);
     ellipse(x, y, r, r);
   }
