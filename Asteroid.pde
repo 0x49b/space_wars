@@ -37,8 +37,6 @@ class Asteroid{
       noStroke();
     }
     
-   
-    
     fill(255);
     ellipse(x, y, r, r);
   }

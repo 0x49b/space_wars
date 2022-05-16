@@ -1,7 +1,7 @@
 import processing.sound.*;
 import controlP5.*;
 
-boolean DEBUG = true;
+boolean DEBUG = false;
 
 /* STEERING */
 float mapval;
@@ -34,7 +34,10 @@ boolean sound = true;
 void setup() {  
   surface.setTitle("Space Wars");
   //surface.setResizable(true);
+  
+  // only one can be used
   size(1200, 675, P3D);
+  //fullScreen(P3D);
   
   // initialize Fonts
   titleFont = createFont("mandalore.otf", 200);
@@ -146,6 +149,8 @@ void startGame(){
      startScreen.showPlayerNameError();
      return;
   }
+  gameScreen.lives = 3;
+  gameScreen.score = 0;
   startScreen.hidePlayerNameError();
   currentScreen = Screens.GAME;
 }

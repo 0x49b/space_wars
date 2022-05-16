@@ -3,11 +3,15 @@ class GameScreen implements Screen{
   Spaceship spaceship;
   GSBackground gsBackground;
   Asteroids asteroids;
+  Explosion explosion;
   
   
-    int fcStart = 0;
-    int fcWait = 60*3;
-    boolean alreadyHit = false;
+  int fcStart = 0;
+  int fcWait = 60*3;
+  boolean alreadyHit = false;
+  
+  int score = 0;
+  int lives = 3;
    
   public GameScreen(PApplet cp5Applet){
     cp5 = new ControlP5(cp5Applet);
@@ -16,9 +20,14 @@ class GameScreen implements Screen{
     gsBackground = new GSBackground();
     spaceship = new Spaceship(cp5Applet);
     asteroids = new Asteroids();
+    explosion = new Explosion();
   }
  
   public void draw(){
+    
+    background(0);
+    
+
     
     
     if( (frameCount - fcStart) > fcWait ){
@@ -26,7 +35,7 @@ class GameScreen implements Screen{
       alreadyHit = false;
     }
     
-    background(0);
+    
     cp5.show();
     gsBackground.draw();
     spaceship.show();
@@ -34,6 +43,15 @@ class GameScreen implements Screen{
     asteroids.update();
     detectSpaceShipAstroidCollision();
     detectBulletAtroidCollision();
+    explosion.show();
+    
+    if(DEBUG){
+      pushMatrix();
+        fill(255);
+        textAlign(LEFT);
+        text("Score: " + score + " Lives: " + lives , 25, height - 50 );
+      popMatrix();
+    }
   }
   
   public void detectSpaceShipAstroidCollision(){
@@ -41,7 +59,7 @@ class GameScreen implements Screen{
     for( Asteroid a : asteroids.asteroids ){
       
       if(DEBUG){
-        stroke(255,0,0);
+        stroke(0,255,0);
         line(a.x, a.y, spaceship.shipX,spaceship.shipY);
       }
    
@@ -51,8 +69,9 @@ class GameScreen implements Screen{
            fcStart = frameCount;
            alreadyHit = true;
            tint(255,0,0);
-           println("BOING!!!!");
            asteroids.asteroids.remove(a);
+           lives--;
+           explosion.emit(a.x, a.y);
         }
      }
     } 
@@ -70,6 +89,8 @@ class GameScreen implements Screen{
         if(dist(a.x, a.y, b.x, b.y) < a.r + b.r){
           
           // Add points to counter --> for Ranking no current Variable for that
+          score += 10;
+          explosion.emit(a.x, a.y);
           a.r -= 20;
           if(a.r < 20){
             asteroids.asteroids.remove(a);
