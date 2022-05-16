@@ -8,8 +8,13 @@ class StartScreen implements Screen{
   Star[] stars = new Star[1000];
   
   boolean playerNameError = false;
+  
+  SoundFile startsound;
  
   public StartScreen(PApplet cp5Applet){
+    
+    startsound = new SoundFile(cp5Applet, "startsound.mp3");
+      
     cp5 = new ControlP5(cp5Applet);
     cp5.addSlider("speed")
      .setPosition(25,25)
@@ -24,7 +29,7 @@ class StartScreen implements Screen{
      .setSize(50,10)
      .setValue(!sound)
      .setMode(ControlP5.SWITCH);
-     cp5.getController("sound").setCaptionLabel("Effects");
+     cp5.getController("sound").setCaptionLabel("Sound & Effects");
       
      cp5.addButton("startGame")
      .setSize(150, 50)

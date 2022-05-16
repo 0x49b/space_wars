@@ -39,7 +39,7 @@ class Asteroids{
   
   private void spawnAsteroid(){
     
-    float radius = random(20, 50);
+    float radius = random(20, 75);
     float x = 0;
     float y = 0;
     

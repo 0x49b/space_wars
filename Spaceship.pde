@@ -160,7 +160,7 @@ class Spaceship{
   
   public void shoot(){
     // Set the sounds on or off based on toggle from StartScreen
-    
+    stats.addShot();
     if(sound){
       pew.play();
     } 

@@ -1,19 +1,10 @@
 import processing.sound.*;
 import controlP5.*;
 
-boolean DEBUG = false;
+boolean DEBUG = true;
 
-/* STEERING */
-float mapval;
-int val;
-
-//Start is start and end 
-PVector startPos, startSize;
-//You could of course make more checkpoints mabye with an array or with an own class :)
-PVector checkpointPos, checkpointSize;
-boolean checkpointCleared = false;
-
-boolean gameStarted = false;
+boolean gameOver = false;
+boolean startSoundPlaying = false;
 Screens currentScreen = Screens.START;
 
 // All Screens
@@ -21,13 +12,16 @@ StartScreen startScreen;
 GameScreen gameScreen;
 AboutScreen aboutScreen;
 MultiplayerScreen multiplayerScreen;
+FinishedScreen finishedScreen;
+
+// Stats for FinishedScreen
+Stats stats;
 
 // Fonts
 PFont titleFont;
 
 ControlP5 cp5;
 
-String textValue ="";
 String playerName;
 boolean sound = true;
 
@@ -37,7 +31,7 @@ void setup() {
   
   // only one can be used
   size(1200, 675, P3D);
-  //fullScreen(P3D);
+  // fullScreen(P3D);
   
   // initialize Fonts
   titleFont = createFont("mandalore.otf", 200);
@@ -49,40 +43,77 @@ void setup() {
   gameScreen = new GameScreen(this);
   aboutScreen = new AboutScreen(this);
   multiplayerScreen = new MultiplayerScreen(this);
+  finishedScreen = new FinishedScreen(this);
+  
+  // intialize stats
+  stats = new Stats();
+  
 }
 
 void draw() {
-    
-  if( currentScreen == Screens.GAME ){
-    displayGameScreen();
-  } else if(currentScreen == Screens.FINISHED ){
+  
+  if(!gameOver){
+    if( currentScreen == Screens.GAME ){
+      displayGameScreen();
+    } else if(currentScreen == Screens.ABOUT ){
+      displayAboutScreen();
+    } else if(currentScreen == Screens.MULTIPLAYER ){
+      displayMultiplayerScreen();
+    }else {
+      displayStartScreen();
+    }
+  } else {
+    currentScreen = Screens.FINISHED;
     displayFinishScreen();
-  } else if(currentScreen == Screens.ABOUT ){
-    displayAboutScreen();
-  } else if(currentScreen == Screens.MULTIPLAYER ){
-    displayMultiplayerScreen();
-  }else {
-    displayStartScreen();
   }
  
 }
 
+
+void stopStartScreenSound(){
+    if(startSoundPlaying){
+      startScreen.startsound.amp(0.0);
+      startScreen.startsound.stop();
+      startSoundPlaying = false;
+    }
+}
+
+void startStartScreenSound(){
+  if(sound){
+  if(!startSoundPlaying){
+    startScreen.startsound.amp(1.0);
+      startScreen.startsound.loop();
+      startSoundPlaying = true;
+    }
+  } else {
+    stopStartScreenSound();
+  }
+}
+
 void displayStartScreen(){
+  stats.resetStats();
+  startStartScreenSound();
   aboutScreen.hideControls();
   startScreen.draw();
 }
 
 void displayGameScreen(){
+   stopStartScreenSound();
    gameScreen.draw(); 
 }
 
-void displayFinishScreen(){}
+void displayFinishScreen(){
+  startStartScreenSound();
+  finishedScreen.draw();
+}
 
 void displayAboutScreen(){
+  stopStartScreenSound();
   aboutScreen.draw();
 }
 
 void displayMultiplayerScreen(){
+  stopStartScreenSound();
   multiplayerScreen.draw();
 }
 
@@ -150,7 +181,7 @@ void startGame(){
      return;
   }
   gameScreen.lives = 3;
-  gameScreen.score = 0;
+  stats.resetScore();
   startScreen.hidePlayerNameError();
   currentScreen = Screens.GAME;
 }
@@ -175,9 +206,11 @@ void sound(boolean theFlag) {
 
 // Go Back to Menu
 void menu(){
+  gameOver = false;
   gameScreen.hideControls();
   gameScreen.reset();
   aboutScreen.hideControls();
+  finishedScreen.hideControls();
   try{
     multiplayerScreen.hideControls();
     multiplayerScreen.disconnectClient();
