@@ -2,7 +2,7 @@ class StartScreen implements Screen{
   
   ControlP5 cp5;
   
-  PFont cf1 = createFont("opensans.ttf",14);
+  
   ControlFont cf2 = new ControlFont(createFont("opensans.ttf",18));
   
   Star[] stars = new Star[1000];

@@ -19,6 +19,7 @@ Stats stats;
 
 // Fonts
 PFont titleFont;
+PFont cf1;
 
 ControlP5 cp5;
 
@@ -35,6 +36,7 @@ void setup() {
   
   // initialize Fonts
   titleFont = createFont("mandalore.otf", 200);
+  cf1 = createFont("opensans.ttf",14);
   
   cp5 = new ControlP5(this);
   

@@ -17,7 +17,14 @@ class FinishedScreen implements Screen{
     background(0);
     cp5.show();
     
-    text(stats.getStatsDebug(), 100, 300);
+    fill(#ffe817);
+    textAlign(CENTER, CENTER);
+    textFont(titleFont);
+    text("Gameover", width/2, height/4);
+    
+    fill(#FFFFFF);
+    textFont(cf1);
+    text(stats.getStatsDebug(),  width/2, height/4 + 100);
     
     
   }
