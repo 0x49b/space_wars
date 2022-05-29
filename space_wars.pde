@@ -1,17 +1,16 @@
 import processing.sound.*;
 import controlP5.*;
 
-boolean DEBUG = true;
+boolean DEBUG = false;
 
-boolean gameOver = false;
 boolean startSoundPlaying = false;
+boolean gameOver = false;
 Screens currentScreen = Screens.START;
 
 // All Screens
 StartScreen startScreen;
 GameScreen gameScreen;
 AboutScreen aboutScreen;
-MultiplayerScreen multiplayerScreen;
 FinishedScreen finishedScreen;
 
 // Stats for FinishedScreen
@@ -24,11 +23,10 @@ PFont cf1;
 ControlP5 cp5;
 
 String playerName;
-boolean sound = true;
+boolean sound = false;
 
 void setup() {  
   surface.setTitle("Space Wars");
-  //surface.setResizable(true);
   
   // only one can be used
   size(1200, 675, P3D);
@@ -44,7 +42,6 @@ void setup() {
   startScreen = new StartScreen(this);
   gameScreen = new GameScreen(this);
   aboutScreen = new AboutScreen(this);
-  multiplayerScreen = new MultiplayerScreen(this);
   finishedScreen = new FinishedScreen(this);
   
   // intialize stats
@@ -59,9 +56,7 @@ void draw() {
       displayGameScreen();
     } else if(currentScreen == Screens.ABOUT ){
       displayAboutScreen();
-    } else if(currentScreen == Screens.MULTIPLAYER ){
-      displayMultiplayerScreen();
-    }else {
+    } else {
       displayStartScreen();
     }
   } else {
@@ -114,11 +109,6 @@ void displayAboutScreen(){
   aboutScreen.draw();
 }
 
-void displayMultiplayerScreen(){
-  stopStartScreenSound();
-  multiplayerScreen.draw();
-}
-
 void keyPressed(){
   
   if(currentScreen == Screens.GAME){
@@ -162,6 +152,8 @@ void keyReleased(){
         gameScreen.spaceship.toggleBooster(false);
         break;
     }
+        
+    gameScreen.checkGodmode(key);
   }
 }
 
@@ -189,21 +181,14 @@ void startGame(){
 }
 
 
-void multiplayer(){
-  startScreen.hideControls();
-  playerName = startScreen.cp5.get(Textfield.class, "textValue").getText();
-  if(playerName.length() < 3 || playerName.length() > 8){
-     startScreen.showPlayerNameError();
-     return;
-  }
-  startScreen.hidePlayerNameError();
-  multiplayerScreen.connectClient();
-  currentScreen = Screens.MULTIPLAYER;
-}
-
 void sound(boolean theFlag) {
   sound = !theFlag;
 }
+
+void debug(boolean theFlag) {
+  DEBUG = !theFlag;
+}
+
 
 
 // Go Back to Menu
@@ -213,11 +198,6 @@ void menu(){
   gameScreen.reset();
   aboutScreen.hideControls();
   finishedScreen.hideControls();
-  try{
-    multiplayerScreen.hideControls();
-    multiplayerScreen.disconnectClient();
-  } catch (Exception e){}
-
   currentScreen = Screens.START;
 }
 
@@ -225,18 +205,4 @@ void about(){
   startScreen.hideControls();
   aboutScreen.reset();
   currentScreen = Screens.ABOUT;
-}
-
-
-// MQTT Callbacks
-void clientConnected() {
-  println("client connected");
-}
-
-void connectionLost() {
-  println("connection lost");
-}
-
-void messageReceived(String topic, byte[] payload) {
-  println("new message: " + topic + " - " + new String(payload));
 }

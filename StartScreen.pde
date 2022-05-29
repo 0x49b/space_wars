@@ -30,17 +30,18 @@ class StartScreen implements Screen{
      .setValue(!sound)
      .setMode(ControlP5.SWITCH);
      cp5.getController("sound").setCaptionLabel("Sound & Effects");
+     
+     cp5.addToggle("debug")
+     .setPosition(225,25)
+     .setSize(50,10)
+     .setValue(!DEBUG)
+     .setMode(ControlP5.SWITCH);
+     cp5.getController("debug").setCaptionLabel("Debug");
       
      cp5.addButton("startGame")
      .setSize(150, 50)
      .setFont(cf2)
      .setPosition(width/2-75,height/4 + 220);
-     
-     cp5.addButton("multiplayer")
-     .setSize(150, 50)
-     .setFont(cf2)
-     .setPosition(width/2-75,height/4 + 290);
-     
      
      cp5.addButton("about")
      .setPosition(width-100,25);

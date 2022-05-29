@@ -9,6 +9,9 @@ class GameScreen implements Screen{
   Asteroids asteroids;
   Explosion explosion;
   
+  String godmodeSequence = "";
+  boolean godmode = false;
+  
   
   int fcStart = 0;
   int fcWait = 60*3;
@@ -16,6 +19,7 @@ class GameScreen implements Screen{
   
   int lives = 3;
   boolean shield = false;
+  int asteroidDecayOnHit = 20;
   
   private CopyOnWriteArrayList<Drop> drops = new CopyOnWriteArrayList();
 
@@ -23,7 +27,8 @@ class GameScreen implements Screen{
   PImage shieldNoneImage = loadImage("shield-none.png");
   PImage heartImage = loadImage("heart.png");
   PImage heartGreyImage = loadImage("heart-grey.png");
-  PImage[] statsBar = new PImage[4];
+  PImage godmodeImage = loadImage("godmode.png");
+  PImage[] statsBar = new PImage[5];
    
   public GameScreen(PApplet cp5Applet){
     cp5 = new ControlP5(cp5Applet);
@@ -38,6 +43,7 @@ class GameScreen implements Screen{
     statsBar[1] = heartImage;
     statsBar[2] = heartImage;
     statsBar[3] = shieldNoneImage;
+    statsBar[4] = shieldNoneImage;
     
   }
  
@@ -57,10 +63,11 @@ class GameScreen implements Screen{
     spaceship.update();
     asteroids.update();
     showDrops();
-    detectSpaceShipAstroidCollision();
-    detectBulletAtroidCollision();
+    
     detectSpaceShipDropCollision();
     explosion.show();
+    detectBulletAtroidCollision();
+    detectSpaceShipAstroidCollision();
     
     if(DEBUG){
       pushMatrix();
@@ -73,6 +80,12 @@ class GameScreen implements Screen{
   }
   
   public void showStatsBar(){
+    
+    if(godmode){
+      statsBar[4] = godmodeImage;
+    } else {
+      statsBar[4] = shieldNoneImage;
+    }
     
     if(shield){
       statsBar[3] = shieldImage;
@@ -101,6 +114,10 @@ class GameScreen implements Screen{
       image(statsBar[i], 100 + i * 16, 25 , 16,16 );
     }
     
+    text(stats.getScore(), 100 + statsBar.length * 16 + 32, 35);
+    
+    
+    
   }
   
   public void showDrops(){
@@ -117,7 +134,7 @@ class GameScreen implements Screen{
       if(lives < 3){
         drops.add(new HeartDrop(x, y));
       }
-    } else if( dropRand<0.75 && dropRand>0.72) {
+    } else if( dropRand<.75 && dropRand>.72) {
      drops.add(new ShieldDrop(x, y));
     }
   }
@@ -152,6 +169,8 @@ class GameScreen implements Screen{
   }
   
   public void detectSpaceShipAstroidCollision(){
+    
+    if(!godmode){
   
     for( Asteroid a : asteroids.asteroids ){
       
@@ -162,10 +181,11 @@ class GameScreen implements Screen{
    
      if(dist(a.x, a.y, spaceship.shipX, spaceship.shipY) < a.r + 5){
        
+       
+       println("Hit by Asteroid shield was ", shield);
+       
        if(!shield){
-         if(!alreadyHit){
-             fcStart = frameCount;
-             alreadyHit = true;
+        if(!alreadyHit){
              asteroids.asteroids.remove(a);
              lives--;
              
@@ -177,13 +197,18 @@ class GameScreen implements Screen{
              explosion.emit(a.x, a.y);
              drops.clear();
           }
-       }else {
-          alreadyHit = true;
-          shield = false;
-        }
-      
+       }
+       
+       
+        a.r -= asteroidDecayOnHit;
+       
+        fcStart = frameCount;
+        alreadyHit = true;
+        shield = false;
      }
     } 
+  }
+    
   }
   
   public void detectBulletAtroidCollision(){
@@ -201,8 +226,8 @@ class GameScreen implements Screen{
           stats.addAsteroidHit();
           
           explosion.emit(a.x, a.y);
-          a.r -= 20;
-          if(a.r < 20){
+          a.r -= asteroidDecayOnHit;
+          if(a.r < asteroidDecayOnHit){
             dropItem(a.x, a.y);
             asteroids.asteroids.remove(a);
           }
@@ -224,6 +249,24 @@ class GameScreen implements Screen{
   
   public void hideControls(){
     cp5.hide();
+  }
+  
+  public void checkGodmode(char c){
+     
+    if( c == 'g' || c == 'o' || c == 't'){
+    
+      if(godmodeSequence.length() < 4){
+        godmodeSequence += c;
+      }
+      
+      if(godmodeSequence.length() == 4){
+        if(godmodeSequence.equals("gott")){
+          godmode = !godmode;
+          godmodeSequence = "";
+        }
+      }
+    }
+    
   }
   
 }
