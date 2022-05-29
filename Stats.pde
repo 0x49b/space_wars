@@ -9,8 +9,15 @@ class Stats{
   public Stats(){}
   
   public void addShot(){ shotsFired++;}
-  public void addHeart(){ heartsCollected++;}
-  public void addShield(){shieldsCollected++;}
+  public void addHeart(){ 
+    heartsCollected++;
+    score += int(random(5, 20));
+  }
+  
+  public void addShield(){
+    shieldsCollected++;
+    score += int(random(5, 30));
+  }
   public void addAsteroidHit(){asteroidsHit++;}
   
   public void resetStats(){
@@ -21,8 +28,10 @@ class Stats{
     resetScore();
   }
   
+  
+  
   public void incrementScore(){
-    score += 10;
+    score += int(random(1, 10));
   }
   
   public void decrementScore(){

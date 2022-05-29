@@ -59,6 +59,7 @@ class GameScreen implements Screen{
     cp5.show();
     gsBackground.draw();
     showStatsBar();
+    spaceship.setShield(shield);
     spaceship.show();
     spaceship.update();
     asteroids.update();
@@ -114,7 +115,8 @@ class GameScreen implements Screen{
       image(statsBar[i], 100 + i * 16, 25 , 16,16 );
     }
     
-    text(stats.getScore(), 100 + statsBar.length * 16 + 32, 35);
+    textSize(15);
+    text("Punkte: " + stats.getScore(), 150 + statsBar.length * 16, 38);
     
     
     
@@ -134,7 +136,7 @@ class GameScreen implements Screen{
       if(lives < 3){
         drops.add(new HeartDrop(x, y));
       }
-    } else if( dropRand<.75 && dropRand>.72) {
+    } else if( dropRand<1.75 && dropRand>.72) {
      drops.add(new ShieldDrop(x, y));
     }
   }
@@ -162,6 +164,9 @@ class GameScreen implements Screen{
             stats.addShield();
           break;
         }
+        
+        
+        
         drops.remove(d);
         
       }

@@ -26,6 +26,8 @@ class Spaceship{
   boolean right = false;
   boolean left = false;
   boolean booster = false;
+  
+  boolean shield = false;
      //<>//
   // Bullets
   CopyOnWriteArrayList<Bullet> bullets = new CopyOnWriteArrayList();
@@ -124,6 +126,14 @@ class Spaceship{
       rectMode(CENTER);
       circle(shipX, shipY, size/2+10);
     }
+    
+    // Show shield
+    if(shield){
+      stroke(251,255,10);
+      noFill();
+      rectMode(CENTER);
+      circle(shipX, shipY, size/2+10);
+    }
         
       
     pushMatrix();
@@ -143,6 +153,9 @@ class Spaceship{
     popMatrix();
   } 
 
+  public void setShield(boolean s){
+    shield = s;
+  }
   
   
   //Steering & Firing
