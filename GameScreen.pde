@@ -8,6 +8,7 @@ class GameScreen implements Screen{
   GSBackground gsBackground;
   Asteroids asteroids;
   Explosion explosion;
+  SoundFile dropPing;
   
   String godmodeSequence = "";
   boolean godmode = false;
@@ -44,7 +45,7 @@ class GameScreen implements Screen{
     statsBar[2] = heartImage;
     statsBar[3] = shieldNoneImage;
     statsBar[4] = shieldNoneImage;
-    
+    dropPing = new SoundFile(cp5Applet, "ping.mp3");
   }
  
   public void draw(){
@@ -136,7 +137,7 @@ class GameScreen implements Screen{
       if(lives < 3){
         drops.add(new HeartDrop(x, y));
       }
-    } else if( dropRand<1.75 && dropRand>.72) {
+    } else if( dropRand<.75 && dropRand>.72) {
      drops.add(new ShieldDrop(x, y));
     }
   }
@@ -165,10 +166,11 @@ class GameScreen implements Screen{
           break;
         }
         
-        
+            if(sound){
+              dropPing.play();
+            } 
         
         drops.remove(d);
-        
       }
     }
   }
@@ -185,9 +187,6 @@ class GameScreen implements Screen{
       }
    
      if(dist(a.x, a.y, spaceship.shipX, spaceship.shipY) < a.r + 5){
-       
-       
-       println("Hit by Asteroid shield was ", shield);
        
        if(!shield){
         if(!alreadyHit){

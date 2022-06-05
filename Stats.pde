@@ -8,7 +8,7 @@ class Stats{
   
   public Stats(){}
   
-  public void addShot(){ shotsFired++;}
+  public void addShot(){ shotsFired++;} 
   public void addHeart(){ 
     heartsCollected++;
     score += int(random(5, 20));
@@ -38,10 +38,6 @@ class Stats{
     score -= 25;
   }
   
-  public int getScore(){
-    return score;
-  }
-  
   public void resetScore(){
     score = 0;
   }
@@ -55,6 +51,26 @@ class Stats{
   
   public String getStatsDebug(){
     return "Shots Fired: " + shotsFired + " Hearts Collected: " + heartsCollected + " Shields Collected: " + shieldsCollected + " Asteroids Hit:  " + asteroidsHit + " Hit Rate: " + getHitRate();
+  }
+  
+  public int getScore(){
+    return score;
+  }
+  
+  public int getShotsFired(){
+    return shotsFired;
+  }
+  
+  public int getHeartsCollected(){
+    return heartsCollected;
+  }
+  
+  public int getShieldsCollected(){
+    return shieldsCollected;
+  }
+  
+  public int getAsteroidsHit(){
+    return asteroidsHit;
   }
 
 }

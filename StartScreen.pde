@@ -4,35 +4,36 @@ class StartScreen implements Screen{
   
   
   ControlFont cf2 = new ControlFont(createFont("opensans.ttf",18));
-  
   Star[] stars = new Star[1000];
-  
   boolean playerNameError = false;
-  
   SoundFile startsound;
+  float starSpeed = 0.5;
  
   public StartScreen(PApplet cp5Applet){
     
     startsound = new SoundFile(cp5Applet, "startsound.mp3");
       
     cp5 = new ControlP5(cp5Applet);
-    cp5.addSlider("speed")
+    /*cp5.addSlider("speed")
      .setPosition(25,25)
      .setSize(100,10)
      .setRange(0.5,100)
-     .setValue(0.5);
+     .setValue(starSpeed);
       cp5.getController("speed").getValueLabel().align(ControlP5.LEFT, ControlP5.BOTTOM_OUTSIDE).setPaddingX(0);
       cp5.getController("speed").getCaptionLabel().align(ControlP5.RIGHT, ControlP5.BOTTOM_OUTSIDE).setPaddingX(0);
+    */
       
      cp5.addToggle("sound")
-     .setPosition(150,25)
+     //.setPosition(150,25)
+     .setPosition(25,25)
      .setSize(50,10)
      .setValue(!sound)
      .setMode(ControlP5.SWITCH);
      cp5.getController("sound").setCaptionLabel("Sound & Effects");
      
      cp5.addToggle("debug")
-     .setPosition(225,25)
+     //.setPosition(225,25)
+     .setPosition(25,75)
      .setSize(50,10)
      .setValue(!DEBUG)
      .setMode(ControlP5.SWITCH);
@@ -98,7 +99,12 @@ class StartScreen implements Screen{
     fill(#ffe817);
     textAlign(CENTER, CENTER);
     textFont(titleFont);
-    text("SpaceWars", width/2, height/4); 
+    text("SpaceWars", width/2, height/4);
+    
+  
+    textFont(cf1);
+    text("Bewegen mit WASD", width/2, height/4 + 350);
+    text("Schiessen mit Maus oder Leertaste", width/2, height/4 + 375);
     
     if(playerNameError){
       pushMatrix();
@@ -112,7 +118,12 @@ class StartScreen implements Screen{
   }
   
   
+  public float getStarSpeed(){
+    return starSpeed;
+  }
+  
   public void setStarSpeed(float newSpeed){
+  starSpeed = newSpeed;
   for( int i = 0; i < stars.length; i++ ){
       stars[i].setSpeed(newSpeed);
     }

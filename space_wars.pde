@@ -23,7 +23,7 @@ PFont cf1;
 ControlP5 cp5;
 
 String playerName;
-boolean sound = false;
+boolean sound = true;
 
 void setup() {  
   surface.setTitle("Space Wars");
@@ -110,8 +110,7 @@ void displayAboutScreen(){
 }
 
 void keyPressed(){
-  
-  if(currentScreen == Screens.GAME){
+   if(currentScreen == Screens.GAME){
     switch(keyCode){
       case 65:
       case 37: 
@@ -124,6 +123,9 @@ void keyPressed(){
       case 87:
       case 38:
         gameScreen.spaceship.toggleBooster(true);
+        break;
+      case 32:
+        gameScreen.spaceship.shoot();
         break;
      }
   }
@@ -155,6 +157,25 @@ void keyReleased(){
         
     gameScreen.checkGodmode(key);
   }
+}
+
+void mouseWheel(MouseEvent event){
+  
+ 
+  float current = startScreen.getStarSpeed();
+  
+    float newCurrent = 0;
+    if(event.getCount() > 0){
+      if(current < 100) { newCurrent = current + 5;}else {newCurrent = current;}
+    }
+    else {
+      if(current > 2) { newCurrent = current - 5;} else {newCurrent = current;}
+    }
+    
+    try{
+      startScreen.setStarSpeed(newCurrent);
+    } catch (NullPointerException e){}
+ 
 }
 
 // Control Inputs must be handled here and not in the classes
