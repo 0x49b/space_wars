@@ -29,8 +29,8 @@ void setup() {
   surface.setTitle("Space Wars");
   
   // only one can be used
-  size(1200, 675, P3D);
-  // fullScreen(P3D);
+  // size(1200, 675, P3D);
+  fullScreen(P3D);
   
   // initialize Fonts
   titleFont = createFont("mandalore.otf", 200);

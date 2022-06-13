@@ -14,6 +14,8 @@ class Asteroid{
   
   float angle = 0;
   
+  PImage asteroidPic;
+  
   
   public Asteroid(float ix, float iy, float ir, PVector iVelocity, float iSpeedModifier){
     x = ix;
@@ -22,6 +24,10 @@ class Asteroid{
     velocity = iVelocity;
     speedModifier = iSpeedModifier;
     angle = atan2(velocity.x, velocity.y);
+    
+    // get an image from an asteroid 1 to 3 random
+    int as = (int) Math.round(random(1, 3));
+    asteroidPic = loadImage("asteroid"+as+".png");
   }
   
   public void update(){ 
@@ -37,12 +43,13 @@ class Asteroid{
       noStroke();
     }
     
-    fill(255);
+    //fill(255);
+    noFill();
     ellipse(x, y, r, r);
+    image(asteroidPic, x-(r/2), y-r/2,r, r);
   }
   
   public void hit(){
-    println("hit: " +r);
     if(r>minR){
       r -= decay;
     }

@@ -23,9 +23,7 @@ class Asteroids{
     
     
     for( Asteroid a : asteroids ){
-  
-      //println(a.x +" "+ a.y + " " + a.angle);
-      a.update();
+        a.update();
       
       if( a.x < 0 - (2*a.r) || a.x > width + (2*a.r) || a.y < 0 - (2*a.r) || a.y > height + (2*a.r)){
         asteroids.remove(a);
